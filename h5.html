@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+  <input style="width: 100%;" type="text" id="cover" placeholder="视频BV号"></input>
+  <input style="width: 100%;" type="text" id="jumpURL" placeholder="实际跳转链接"></input>
+  <button style="width: 100%;" id="execButton">生成诈骗链接并复制</button>
+  <label id="result"></label>
+</body>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+  const execButton = document.getElementById("execButton");
+  const coverBox = document.getElementById("cover");
+  const jumpBox = document.getElementById("jumpURL");
+  const resultLabel = document.getElementById("result")
+
+  execButton.onclick = async function () {
+    const coverBV = coverBox.value;
+    const jumpURL = jumpBox.value;
+
+    const part = encodeURIComponent('{"edit":false,"url":"' + jumpURL + '"}');
+    const result = 'https://www.bilibili.com/video/' + coverBV + '?auto_float_layer=2&auto_float_layer_extra=' + part;
+
+    const res = await axios.get("https://service-ijd4slqi-1253419200.gz.apigw.tencentcs.com/release/short_url", {
+      params: {
+        "url": encodeURIComponent(result),
+        "href": "https://xiaojuzi.fun/bili-short-url/"
+      }
+    });
+    console.log(res)
+  }
+</script>
+
+</html>
