@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body>
+  <input style="width: 100%;" type="text" id="jumpURL" placeholder="点开后打开的网页（任意外站链接，完整地址），如 https://www.baidu.com/"></input>
+  <label>注意事项：</label><br>
+  <label>请勿滥用此功能</label><br>
+  <button id="execButton">生成站外链接并复制</button>
+  <a href="https://tool.bili.fan/b-short">继续生成短链接（必须）</a>
+  <br>
+  <label style="width: 100%;" id="result"></label>
+</body>
+
+<script>
+  const execButton = document.getElementById("execButton");
+  const jumpBox = document.getElementById("jumpURL");
+  const resultLabel = document.getElementById("result")
+
+  execButton.onclick = async function () {
+    const jumpURL = jumpBox.value.trim();
+
+    if (jumpURL == '') {
+      resultLabel.innerHTML = '请填写跳转地址';
+    }
+
+    const result = 'https://boss-shjd.biliapi.net/material/static/98b9d40b2cbe4441da9d5071b90c10e0/jump.asp?href=' + jumpURL;
+
+    resultLabel.innerHTML = result;
+    await navigator.clipboard.writeText(result);
+  }
+</script>
+
+</html>
