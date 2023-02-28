@@ -6,10 +6,14 @@
 </head>
 
 <body>
-  <input style="width: 100%;" type="text" id="cover" placeholder="视频BV号，如 BV1K24y1X757"></input>
+  <input style="width: 100%;" type="text" id="cover" placeholder="在评论区显示蓝字的视频BV号，如 BV1oy4y1f7J9"></input>
+  <input style="width: 100%;" type="text" id="inner" placeholder="点开后实际打开的视频BV号，如 BV1ij41137bm （必填）"></input>
   <input style="width: 100%;" type="text" id="jumpURL" placeholder="点开后弹出的网页（任意外站链接，完整地址），如 https://www.baidu.com/"></input>
+  <label>注意事项：</label><br>
+  <label>① 弹出网页功能仅可在安卓版本与iOS版本（非概念版）中使用，且要求客户端版本高于7.7</label><br>
+  <label>② 当链接发布于动态内且同时存在表里链接时，仅安卓版本可完成诈骗跳转，iOS或网页端将仅会跳转至表链接</label><br>
   <button id="execButton">生成诈骗链接并复制</button>
-  <a href="https://xiaojuzi.fun/bili-short-url/">继续生成短链接（推荐）</a>
+  <a href="https://tool.bili.fan/b-short">继续生成短链接（推荐）</a>
   <br>
   <label style="width: 100%;" id="result"></label>
 </body>
@@ -17,15 +21,31 @@
 <script>
   const execButton = document.getElementById("execButton");
   const coverBox = document.getElementById("cover");
+  const innerBox = document.getElementById("inner");
   const jumpBox = document.getElementById("jumpURL");
   const resultLabel = document.getElementById("result")
 
   execButton.onclick = async function () {
-    const coverBV = coverBox.value;
-    const jumpURL = jumpBox.value;
+    const coverBV = coverBox.value.trim();
+    const innerBV = innerBox.value.trim();
+    const jumpURL = jumpBox.value.trim();
 
-    const part = encodeURIComponent('{"edit":false,"url":"' + jumpURL + '"}');
-    const result = 'https://www.bilibili.com/video/' + coverBV + '?auto_float_layer=2&auto_float_layer_extra=' + part;
+    if (innerBV == '') {
+      resultLabel.innerHTML = '请填写BV号';
+    }
+
+    let part = ''
+    if (jumpURL != '') {
+      part = '?auto_float_layer=2&auto_float_layer_extra=' + encodeURIComponent('{"edit":false,"url":"' + jumpURL + '"}')
+    }
+    let main = ''
+    if (coverBV != '') {
+      main = coverBV + '/../' + innerBV;
+    }
+    else {
+      main = innerBV
+    }
+    const result = 'https://www.bilibili.com/video/' + main + part;
 
     resultLabel.innerHTML = result;
     await navigator.clipboard.writeText(result);
